@@ -57,6 +57,7 @@ android {
 
 dependencies {
 
+  implementation(project(":core:data"))
   implementation(project(":core:model"))
 
   implementation("androidx.core:core-ktx:1.9.0")
