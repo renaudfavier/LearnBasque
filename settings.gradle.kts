@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "learnbasque"
 include(":app")
+include(":core:model")
