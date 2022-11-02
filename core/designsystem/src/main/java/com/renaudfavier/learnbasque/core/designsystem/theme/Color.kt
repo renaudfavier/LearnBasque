@@ -1,4 +1,4 @@
-package com.renaudfavier.learnbasque.ui.theme
+package com.renaudfavier.learnbasque.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

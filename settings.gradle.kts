@@ -18,4 +18,5 @@ dependencyResolutionManagement {
 rootProject.name = "learnbasque"
 include(":app")
 include(":core:data")
+include(":core:designsystem")
 include(":core:model")
