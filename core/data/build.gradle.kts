@@ -5,5 +5,5 @@ plugins {
 dependencies {
     implementation(project(":core:model"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation(libs.kotlinx.coroutines.android)
 }
