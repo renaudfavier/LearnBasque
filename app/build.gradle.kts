@@ -1,16 +1,13 @@
 plugins {
-  id("com.android.application")
-  id("org.jetbrains.kotlin.android")
+  id("learnbasque.android.application")
+  id("learnbasque.android.application.compose")
 }
 
 android {
   namespace = "com.renaudfavier.learnbasque"
-  compileSdk = 33
 
   defaultConfig {
     applicationId = "com.renaudfavier.learnbasque"
-    minSdk = 21
-    targetSdk = 33
     versionCode = 1
     versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
@@ -30,19 +27,6 @@ android {
     }
   }
 
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-  }
-  kotlinOptions {
-    jvmTarget = "1.8"
-  }
-  buildFeatures {
-    compose = true
-  }
-  composeOptions {
-    kotlinCompilerExtensionVersion = "1.3.0" // FIXME() libs.findVersion("androidxComposeCompiler").get().toString()
-  }
   packagingOptions {
     resources {
       excludes.add("/META-INF/{AL2.0,LGPL2.1}")

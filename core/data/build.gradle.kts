@@ -1,5 +1,9 @@
 plugins {
-    id("kotlin")
+    id("learnbasque.android.library")
+}
+
+android {
+    namespace = "com.renaudfavier.learnbasque.core.data"
 }
 
 dependencies {

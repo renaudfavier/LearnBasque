@@ -1,10 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("learnbasque.android.library")
+    id("learnbasque.android.library.compose")
 }
 
 android {
-    compileSdk = 33
     namespace = "com.renaudfavier.learnbasque.core.designsystem"
 
     defaultConfig {
