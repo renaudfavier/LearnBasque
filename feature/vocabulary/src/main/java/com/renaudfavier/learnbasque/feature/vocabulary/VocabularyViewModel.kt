@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
+import com.renaudfavier.learnbasque.core.result.asResult
+import com.renaudfavier.learnbasque.core.result.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -61,19 +63,4 @@ sealed interface VocabularyUiState {
     ) : VocabularyUiState
     object Loading: VocabularyUiState
     object Error: VocabularyUiState
-}
-
-sealed interface Result<out T> {
-    data class Success<T>(val data: T) : Result<T>
-    data class Error(val exception: Throwable? = null) : Result<Nothing>
-    object Loading : Result<Nothing>
-}
-
-fun <T> Flow<T>.asResult(): Flow<Result<T>> {
-    return this
-        .map<T, Result<T>> {
-            Result.Success(it)
-        }
-        .onStart { emit(Result.Loading) }
-        .catch { emit(Result.Error(it)) }
 }
