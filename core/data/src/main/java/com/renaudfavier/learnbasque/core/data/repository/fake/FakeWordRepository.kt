@@ -8,13 +8,12 @@ import kotlinx.coroutines.flow.flow
 class FakeWordRepository : WordsRepository {
 
     override fun getWordsStream(): Flow<List<Word>> {
-        return flow {
-            emit(
-                listOf(
-                    Word(id = "", "jambon", "jamon"),
-                    Word(id = "", "jambon2", "jamon2"),
-                )
+        val words = ArrayList<Word>()
+        for (i in 1..10) {
+            words.add(
+                Word(id = "fake$i", "fr$i", "bask$i")
             )
         }
+        return flow { emit(words) }
     }
 }
