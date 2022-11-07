@@ -1,9 +1,12 @@
 package com.renaudfavier.learnbasque.feature.vocabulary
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +31,7 @@ fun VocabularyScreen(
             CircularProgressIndicator()
         }
         VocabularyUiState.Error -> {
-            TODO()
+            Text(text = "error")
         }
         is VocabularyUiState.EasyMemoryCardUiModel -> {
             EasyMemoryCard(
@@ -46,7 +49,9 @@ fun EasyMemoryCard(
     onProp1Click: () -> Unit,
     onProp2Click: () -> Unit,
 ) {
-    Card {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = model.backgroundColor ?: Color.White)
+    ) {
         Text(text = model.wordToTranslate)
         Button(onClick = onProp1Click) {
             Text(text = model.proposition1)
