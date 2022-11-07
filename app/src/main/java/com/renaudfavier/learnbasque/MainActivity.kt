@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
     private val getNextWordToMemorizeUseCase = GetNextWordToMemorizeUseCase(wordRepository, answerRepository, getUserLevelUseCase)
     private val addAnswerUseCase = AddAnswerUseCase(wordRepository, answerRepository)
 
-    private val viewModel = VocabularyViewModel(getNextWordToMemorizeUseCase, addAnswerUseCase)
+    private val viewModel = VocabularyViewModel(getNextWordToMemorizeUseCase, wordRepository, addAnswerUseCase)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

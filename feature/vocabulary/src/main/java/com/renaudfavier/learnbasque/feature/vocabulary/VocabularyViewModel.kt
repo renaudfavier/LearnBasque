@@ -3,6 +3,8 @@ package com.renaudfavier.learnbasque.feature.vocabulary
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
+import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.model.data.Word
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
@@ -14,9 +16,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class VocabularyViewModel(
     private val getNextWordToMemorize: GetNextWordToMemorizeUseCase,
+    private val wordsRepository: WordsRepository,
     private val addAnswerUseCase: AddAnswerUseCase,
 ) : ViewModel() {
 
@@ -25,15 +29,6 @@ class VocabularyViewModel(
     fun start() = viewModelScope.launch {
         vocabularyUiState.emit(getNextWordToMemorize().mapToNewQuestionUiModel())
     }
-    //= vocabularyUiStateStream(
-     //   nextWord = getNextWordToMemorize
-    //).stateIn(
-     //   scope = viewModelScope,
-    //    started = SharingStarted.WhileSubscribed(5_000),
-     //   initialValue = VocabularyUiState.Loading
-    //)
-
-
 
     fun answerProposition1() = viewModelScope.launch {
         val model = vocabularyUiState.value as? VocabularyUiState.EasyMemoryCardUiModel ?: return@launch
@@ -58,14 +53,20 @@ class VocabularyViewModel(
         delay(1000L)
         vocabularyUiState.emit(getNextWordToMemorize().mapToNewQuestionUiModel())
     }
-}
 
-fun Word.mapToNewQuestionUiModel() = VocabularyUiState.EasyMemoryCardUiModel(
-    id = id,
-    wordToTranslate = basque,
-    proposition1 = "ijfoezoijf",
-    proposition2 = french
-)
+    private suspend fun Word.mapToNewQuestionUiModel() : VocabularyUiState.EasyMemoryCardUiModel {
+
+        val wrongOne = wordsRepository.getWords().filterNot {it.id == id}.random().french
+        val isRightIsFirstPosition = Random.nextBoolean()
+
+        return VocabularyUiState.EasyMemoryCardUiModel(
+            id = id,
+            wordToTranslate = basque,
+            proposition1 = if(isRightIsFirstPosition) french else wrongOne,
+            proposition2 = if(isRightIsFirstPosition) wrongOne else french
+        )
+    }
+}
 
 sealed interface VocabularyUiState {
     data class EasyMemoryCardUiModel(
