@@ -12,6 +12,7 @@ compose = "1.3.0"
 junit4 = "4.13.2"
 kotlin = "1.7.20"
 kotlinxCoroutines = "1.6.4"
+kotlinxDatetime = "0.4.0"
 material3 = "1.1.0-alpha01"
 
 [libraries]
@@ -34,6 +35,7 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
