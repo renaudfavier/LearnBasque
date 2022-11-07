@@ -7,5 +7,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
 }

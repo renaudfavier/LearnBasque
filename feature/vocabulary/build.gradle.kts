@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.renaudfavier.learnbasque.feature.vocabulary"
 }
+
+dependencies {
+    implementation(libs.kotlinx.datetime)
+}
