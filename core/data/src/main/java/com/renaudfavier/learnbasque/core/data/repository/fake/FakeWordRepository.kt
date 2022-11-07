@@ -2,18 +2,21 @@ package com.renaudfavier.learnbasque.core.data.repository.fake
 
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.model.data.Word
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class FakeWordRepository : WordsRepository {
 
-    override fun getWordsStream(): Flow<List<Word>> {
-        val words = ArrayList<Word>()
+    private val words: MutableList<Word> = mutableListOf()
+
+    init {
         for (i in 1..10) {
             words.add(
-                Word(id = "fake$i", "fr$i", "bask$i")
+                Word("fake$i", "fr$i", "bask$i", i)
             )
         }
-        return flow { emit(words) }
     }
+
+    override suspend fun getWords(): List<Word> = words
+
+    override suspend fun getWord(wordId: String): Word? = words.find { it.id == wordId }
+
 }
