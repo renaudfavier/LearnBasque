@@ -1,5 +1,6 @@
 package com.renaudfavier.learnbasque.feature.vocabulary.domain
 
+import android.util.Log
 import com.renaudfavier.learnbasque.core.data.repository.MemoryTestAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.GetUserLevelUseCase
@@ -21,13 +22,15 @@ class GetNextWordToMemorizeUseCase(
 
     suspend operator fun invoke(): Word = withContext(defaultDispatcher) {
         val userLevel = getUserLevelUseCase().first()
-        val words = wordsRepository.getWords()
-
-        val wordsOfUserLevel = words.filter { it.complexity <= userLevel + 5 }
-        val idsOfUserLevel = wordsOfUserLevel.map { it.id }
-
-        val wordId = getNextWordId(idsOfUserLevel)
-        return@withContext words.find { it.id == wordId } ?: wordsOfUserLevel.first()
+        Log.i("oji", "userLevel $userLevel")
+        return@withContext wordsRepository.getWords().random()
+//        val words = wordsRepository.getWords()
+//
+//        val wordsOfUserLevel = words.filter { it.complexity <= userLevel + 5 }
+//        val idsOfUserLevel = wordsOfUserLevel.map { it.id }
+//
+//        val wordId = getNextWordId(idsOfUserLevel)
+//        return@withContext words.find { it.id == wordId } ?: wordsOfUserLevel.first()
     }
 
     private suspend fun getNextWordId(idsOfUserLevel: List<String>) =
