@@ -1,5 +1,6 @@
 plugins {
     id("learnbasque.android.library")
+    id("learnbasque.android.hilt")
 }
 
 android {
