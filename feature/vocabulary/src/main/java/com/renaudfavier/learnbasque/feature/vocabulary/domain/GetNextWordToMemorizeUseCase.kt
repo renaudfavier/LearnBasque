@@ -6,18 +6,22 @@ import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.GetUserLevelUseCase
 import com.renaudfavier.learnbasque.core.model.data.MemoryTestAnswer
 import com.renaudfavier.learnbasque.core.model.data.Word
+import com.renaudfavier.learnbasque.core.network.Dispatcher
+import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers
+import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class GetNextWordToMemorizeUseCase(
+class GetNextWordToMemorizeUseCase @Inject constructor(
     private val wordsRepository: WordsRepository,
     private val memoryTestAnswerRepository: MemoryTestAnswerRepository,
     private val getUserLevelUseCase: GetUserLevelUseCase,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) {
 
     suspend operator fun invoke(): Word = withContext(defaultDispatcher) {

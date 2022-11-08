@@ -3,15 +3,17 @@ package com.renaudfavier.learnbasque.feature.vocabulary.domain
 import com.renaudfavier.learnbasque.core.data.repository.MemoryTestAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.model.data.MemoryTestAnswer
+import com.renaudfavier.learnbasque.core.network.Dispatcher
+import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import javax.inject.Inject
 
-class AddAnswerUseCase(
+class AddAnswerUseCase @Inject constructor(
     private val wordsRepository: WordsRepository,
     private val memoryTestAnswerRepository: MemoryTestAnswerRepository,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    @Dispatcher(Default)  private val defaultDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(
         wordId: String,

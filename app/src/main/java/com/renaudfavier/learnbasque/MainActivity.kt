@@ -13,17 +13,15 @@ import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyScreen
 import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val wordRepository = BaseWordsRepository()
-    private val answerRepository = FakeMemoryTestAnswerRepository()
-    private val getUserLevelUseCase = GetUserLevelUseCase(answerRepository, wordRepository)
 
-    private val getNextWordToMemorizeUseCase = GetNextWordToMemorizeUseCase(wordRepository, answerRepository, getUserLevelUseCase)
-    private val addAnswerUseCase = AddAnswerUseCase(wordRepository, answerRepository)
-
-    private val viewModel = VocabularyViewModel(getNextWordToMemorizeUseCase, wordRepository, addAnswerUseCase)
+    @Inject
+    lateinit var viewModel: VocabularyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

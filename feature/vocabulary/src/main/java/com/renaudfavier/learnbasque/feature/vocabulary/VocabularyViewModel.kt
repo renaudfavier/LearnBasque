@@ -10,15 +10,17 @@ import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
 import com.renaudfavier.learnbasque.core.result.asResult
 import com.renaudfavier.learnbasque.core.result.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
-class VocabularyViewModel(
+class VocabularyViewModel @Inject constructor(
     private val getNextWordToMemorize: GetNextWordToMemorizeUseCase,
     private val wordsRepository: WordsRepository,
     private val addAnswerUseCase: AddAnswerUseCase,

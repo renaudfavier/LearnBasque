@@ -7,10 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class GetUserLevelUseCase(
+class GetUserLevelUseCase @Inject constructor(
     private val memoryTestAnswerRepository: MemoryTestAnswerRepository,
-    private val wordsRepository: WordsRepository,
 ) {
 
     suspend operator fun invoke(): Flow<Int> {
