@@ -11,6 +11,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("learnbasque.android.library")
+                apply("learnbasque.android.hilt")
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {

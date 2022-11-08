@@ -40,5 +40,9 @@ gradlePlugin {
             id = "learnbasque.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
+        register("androidHilt") {
+            id = "learnbasque.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
     }
 }
