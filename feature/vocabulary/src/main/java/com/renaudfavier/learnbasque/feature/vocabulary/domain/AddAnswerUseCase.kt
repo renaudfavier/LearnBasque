@@ -1,8 +1,9 @@
 package com.renaudfavier.learnbasque.feature.vocabulary.domain
 
-import com.renaudfavier.learnbasque.core.data.repository.MemoryTestAnswerRepository
+import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
-import com.renaudfavier.learnbasque.core.model.data.MemoryTestAnswer
+import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
+import com.renaudfavier.learnbasque.core.model.data.UserAnswer
 import com.renaudfavier.learnbasque.core.network.Dispatcher
 import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 class AddAnswerUseCase @Inject constructor(
     private val wordsRepository: WordsRepository,
-    private val memoryTestAnswerRepository: MemoryTestAnswerRepository,
+    private val userAnswerRepository: UserAnswerRepository,
     @Dispatcher(Default)  private val defaultDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(
@@ -21,12 +22,12 @@ class AddAnswerUseCase @Inject constructor(
     ): Boolean = withContext(defaultDispatcher) {
         val word = wordsRepository.getWord(wordId)!!
         val isCorrect = answer == word.french
-        val memoryTestAnswer = MemoryTestAnswer(
-            wordId = word.id,
-            isCorrect = isCorrect,
+        val memoryTestAnswer = UserAnswer(
+            questionId = word.id,
+            answer = QuestionAnswer.AnswerString(answer),
             date = Clock.System.now()
         )
-        memoryTestAnswerRepository.addAnswer(memoryTestAnswer)
+        userAnswerRepository.addAnswer(memoryTestAnswer)
         return@withContext isCorrect
     }
 }

@@ -1,25 +1,21 @@
 package com.renaudfavier.learnbasque.feature.vocabulary.domain
 
 import android.util.Log
-import com.renaudfavier.learnbasque.core.data.repository.MemoryTestAnswerRepository
+import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.GetUserLevelUseCase
-import com.renaudfavier.learnbasque.core.model.data.MemoryTestAnswer
+import com.renaudfavier.learnbasque.core.model.data.UserAnswer
 import com.renaudfavier.learnbasque.core.model.data.Word
 import com.renaudfavier.learnbasque.core.network.Dispatcher
-import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers
 import com.renaudfavier.learnbasque.core.network.LearnBasqueDispatchers.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetNextWordToMemorizeUseCase @Inject constructor(
     private val wordsRepository: WordsRepository,
-    private val memoryTestAnswerRepository: MemoryTestAnswerRepository,
+    private val userAnswerRepository: UserAnswerRepository,
     private val getUserLevelUseCase: GetUserLevelUseCase,
     @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) {
@@ -38,19 +34,20 @@ class GetNextWordToMemorizeUseCase @Inject constructor(
     }
 
     private suspend fun getNextWordId(idsOfUserLevel: List<String>) =
-        memoryTestAnswerRepository
+        userAnswerRepository
             .getAnswers()
-            .filter { idsOfUserLevel.contains(it.wordId) }
-            .groupBy { it.wordId }
+            .filter { idsOfUserLevel.contains(it.questionId) }
+            .groupBy { it.questionId }
             .map { it.key to computeMastering(it.value) }
             .sortedWith(BestMasteringComparator())
             .firstOrNull()
             ?.first
 
     //0 to 1, 0 is not mastered at all, 1 is perfectly mastered
-    private fun computeMastering(wordsEntry: List<MemoryTestAnswer>): Float? {
-        val lastTry = wordsEntry.minByOrNull { it.date } ?: return null
-        return if (lastTry.isCorrect) 1f else 0f
+    private fun computeMastering(wordsEntry: List<UserAnswer>): Float? {
+        return 0f
+        //val lastTry = wordsEntry.minByOrNull { it.date } ?: return null
+        //return if (lastTry.isCorrect) 1f else 0f
     }
 
     class BestMasteringComparator: Comparator<Pair<String, Float?>> {

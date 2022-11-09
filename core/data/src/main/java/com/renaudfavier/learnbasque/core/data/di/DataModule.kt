@@ -17,9 +17,9 @@
 package com.renaudfavier.learnbasque.core.data.di
 
 import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
-import com.renaudfavier.learnbasque.core.data.repository.MemoryTestAnswerRepository
+import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
-import com.renaudfavier.learnbasque.core.data.repository.fake.FakeMemoryTestAnswerRepository
+import com.renaudfavier.learnbasque.core.data.repository.fake.FakeUserAnswerRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +33,5 @@ object DataModule {
     fun provideWordRepository(): WordsRepository = BaseWordsRepository()
 
     @Provides
-    fun provideMemoryTestAnswerRepository(): MemoryTestAnswerRepository = FakeMemoryTestAnswerRepository()
+    fun provideMemoryTestAnswerRepository(): UserAnswerRepository = FakeUserAnswerRepository()
 }

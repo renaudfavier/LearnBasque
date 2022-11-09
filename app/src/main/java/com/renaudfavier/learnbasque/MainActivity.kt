@@ -5,12 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
-import com.renaudfavier.learnbasque.core.data.repository.fake.FakeMemoryTestAnswerRepository
 import com.renaudfavier.learnbasque.core.designsystem.theme.LearnBasqueTheme
-import com.renaudfavier.learnbasque.core.domain.GetUserLevelUseCase
-import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
-import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyScreen
 import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyViewModel
 import dagger.hilt.android.AndroidEntryPoint
