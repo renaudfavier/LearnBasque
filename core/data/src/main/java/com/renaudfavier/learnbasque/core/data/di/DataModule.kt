@@ -17,9 +17,11 @@
 package com.renaudfavier.learnbasque.core.data.di
 
 import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
+import com.renaudfavier.learnbasque.core.data.repository.OfflineUserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.data.repository.fake.FakeUserAnswerRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +34,14 @@ object DataModule {
     @Provides
     fun provideWordRepository(): WordsRepository = BaseWordsRepository()
 
-    @Provides
-    fun provideMemoryTestAnswerRepository(): UserAnswerRepository = FakeUserAnswerRepository()
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface DataModule2 {
+
+    @Binds
+    fun bindsUserAnswerRepository(
+        topicsRepository: OfflineUserAnswerRepository
+    ): UserAnswerRepository
 }

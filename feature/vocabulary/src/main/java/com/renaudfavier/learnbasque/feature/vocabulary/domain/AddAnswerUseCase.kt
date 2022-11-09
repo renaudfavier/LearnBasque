@@ -1,5 +1,6 @@
 package com.renaudfavier.learnbasque.feature.vocabulary.domain
 
+import android.util.Log
 import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
@@ -28,6 +29,7 @@ class AddAnswerUseCase @Inject constructor(
             date = Clock.System.now()
         )
         userAnswerRepository.addAnswer(memoryTestAnswer)
+        Log.i("test", "count: "+ userAnswerRepository.getAnswers().count())
         return@withContext isCorrect
     }
 }
