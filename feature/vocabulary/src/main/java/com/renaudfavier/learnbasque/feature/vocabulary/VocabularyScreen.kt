@@ -107,7 +107,7 @@ fun MemoryCardPreview() {
 
 
 private val fakeCardModel = VocabularyUiState.EasyMemoryCardUiModel(
-    id = "",
+    wordId = "",
     wordToTranslate = "Milesker Anitz",
     proposition1 = "Peut-être",
     proposition2 = "Merci beaucoup",

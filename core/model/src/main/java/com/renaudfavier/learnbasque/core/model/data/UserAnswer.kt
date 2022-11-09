@@ -8,8 +8,8 @@ data class UserAnswer(
     val date: Instant,
 )
 
-sealed class QuestionAnswer {
-    class AnswerString(val answer: String): QuestionAnswer()
+sealed interface QuestionAnswer {
+    class AnswerString(val answer: String): QuestionAnswer
 }
 
 enum class QuestionAnswerType {
