@@ -7,6 +7,7 @@ import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.IsAnswerCorrectUseCase
 import com.renaudfavier.learnbasque.core.model.data.Exercise
+import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.model.data.Word
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
@@ -48,7 +49,7 @@ class VocabularyViewModel @Inject constructor(
 
     private suspend fun answer(proposition: String, model: VocabularyUiState.EasyMemoryCardUiModel) {
         val isCorrect = isAnswerCorrectUseCase(
-            Exercise.TranslateFromBasque(model.wordId),
+            Exercise.TranslateFromBasque(model.wordId, TwoPropositions),
             QuestionAnswer.AnswerString(proposition)
         )
         addAnswerUseCase.invoke(model.wordId, proposition)

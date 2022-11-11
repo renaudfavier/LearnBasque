@@ -1,10 +1,20 @@
 package com.renaudfavier.learnbasque.core.model.data
 
-sealed interface Exercise {
+sealed class Exercise(open val id: String) {
     data class TranslateFromBasque(
-        val wordId: String
-    ): Exercise
+        val wordId: String,
+        val difficulty: Difficulty,
+    ): Exercise("$wordId${difficulty.name}") {
+        enum class Difficulty {
+            TwoPropositions
+        }
+    }
     data class TranslateToBasque(
-        val wordId: String
-    ): Exercise
+        val wordId: String,
+        val difficulty: Difficulty,
+    ): Exercise("$wordId${difficulty.name}") {
+        enum class Difficulty {
+            TwoPropositions
+        }
+    }
 }
