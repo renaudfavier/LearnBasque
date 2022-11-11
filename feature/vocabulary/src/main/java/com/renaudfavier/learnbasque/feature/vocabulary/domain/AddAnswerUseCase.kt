@@ -26,6 +26,7 @@ class AddAnswerUseCase @Inject constructor(
         val memoryTestAnswer = UserAnswer(
             questionId = word.id,
             answer = QuestionAnswer.AnswerString(answer),
+            isCorrect = isCorrect,
             date = Clock.System.now()
         )
         userAnswerRepository.addAnswer(memoryTestAnswer)

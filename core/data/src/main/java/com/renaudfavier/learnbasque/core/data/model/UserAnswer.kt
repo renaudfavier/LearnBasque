@@ -11,5 +11,6 @@ fun UserAnswer.toEntity() = UserAnswerEntity(
     questionId = questionId,
     answerAsString = answer.asString(),
     answerType = answer.type(),
+    isCorrect = isCorrect,
     date = date
 )

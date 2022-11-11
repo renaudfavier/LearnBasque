@@ -18,12 +18,14 @@ data class UserAnswerEntity(
     val questionId: String,
     val answerAsString: String,
     val answerType: QuestionAnswerType,
+    val isCorrect: Boolean,
     val date: Instant,
 )
 
 fun UserAnswerEntity.asExternalModel() = UserAnswer(
     questionId = questionId,
     answer = answerAsString.parse(answerType),
+    isCorrect = isCorrect,
     date = date
 )
 

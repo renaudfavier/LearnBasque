@@ -5,6 +5,7 @@ import kotlinx.datetime.Instant
 data class UserAnswer(
     val questionId: String,
     val answer: QuestionAnswer,
+    val isCorrect: Boolean,
     val date: Instant,
 )
 
