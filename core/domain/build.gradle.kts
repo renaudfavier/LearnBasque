@@ -10,6 +10,8 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
+    testImplementation(project(":core:testing"))
+
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
 
