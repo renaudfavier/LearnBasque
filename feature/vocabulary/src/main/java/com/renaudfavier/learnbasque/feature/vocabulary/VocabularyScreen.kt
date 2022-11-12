@@ -71,6 +71,7 @@ fun EasyMemoryCard(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp),
             style = Typography.displayMedium,
         )
+        // TODO : LOOK AT FLOW ROW
         Row(
             modifier = Modifier
                 .padding(horizontal = 24.dp)

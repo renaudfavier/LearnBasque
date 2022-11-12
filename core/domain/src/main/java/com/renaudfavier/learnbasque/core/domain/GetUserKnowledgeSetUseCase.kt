@@ -23,7 +23,7 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
     private val answerRepository: UserAnswerRepository,
     private val wordRepository: WordsRepository
 ) {
-    suspend fun invoke(): List<KnowledgeWithMastering> = answerRepository
+    suspend operator fun invoke(): List<KnowledgeWithMastering> = answerRepository
             .getAnswers()
             .groupBy { it.questionId }
             .mapKeys { exerciseRepository.getExercise(it.key) }

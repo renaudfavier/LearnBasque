@@ -6,7 +6,7 @@ class IdBasedExerciseRepository: ExerciseRepository {
 
     override suspend fun getExercise(id: String): Exercise {
         val list = id.split("-")
-        when(list.first()) {
+        return when(list.first()) {
             Exercise.TranslateFromBasque.ID_PREFIX ->
                 Exercise.TranslateFromBasque(
                     list[1],
@@ -17,6 +17,7 @@ class IdBasedExerciseRepository: ExerciseRepository {
                     list[1],
                     Exercise.TranslateToBasque.Difficulty.valueOf(list[2])
                 )
+            else -> TODO()
         }
     }
 
