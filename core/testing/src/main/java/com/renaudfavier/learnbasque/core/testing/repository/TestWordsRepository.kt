@@ -9,9 +9,7 @@ class TestWordsRepository: WordsRepository {
 
     override suspend fun getWords(): List<Word> = words
 
-    override suspend fun getWord(wordId: String): Word? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getWord(wordId: String): Word? = words.find { it.id == wordId }
 
     /**
      * A test-only API to allow setting/unsetting of words.

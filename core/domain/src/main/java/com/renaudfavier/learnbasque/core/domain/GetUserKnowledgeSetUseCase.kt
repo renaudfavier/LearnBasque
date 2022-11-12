@@ -85,10 +85,10 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
 
                 returnedMastering = maxMastering / 2
                 if (it.userAnswers.secondMostRecentAnswer?.isCorrect == true) {
-                    returnedMastering = returnedMastering!! + maxMastering * 3/10
+                    returnedMastering = returnedMastering!! + maxMastering * 0.3f
                 }
                 if (it.userAnswers.thirdMostRecentAnswer?.isCorrect == true) {
-                    returnedMastering = returnedMastering!! + maxMastering * 2/10
+                    returnedMastering = returnedMastering!! + maxMastering * 0.2f
                 }
 
                 //TODO Apply date malus
@@ -104,7 +104,7 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
         }
         return when {
             mostRecentSuccessDate == null && mostRecentFailDate == null -> null
-            mostRecentSuccessDate == null || mostRecentFailDate!! > mostRecentSuccessDate!! ->
+            mostRecentSuccessDate == null || (mostRecentFailDate ?: Instant.DISTANT_PAST) > mostRecentSuccessDate!! ->
                 Math.min(returnedMastering ?: 0f, mostRecentFailMaxMastering ?: 1f)
             else -> returnedMastering
         }
@@ -116,10 +116,12 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
     )
 
     private fun List<UserAnswer>.toThreeMostRecentUserAnswer() =
-        sortedBy { it.date }
+        sortedByDescending { it.date }
             .run {
                 ThreeMostRecentUserAnswer(
-                    getOrNull(0), getOrNull(1), getOrNull(3)
+                    getOrNull(0),
+                    getOrNull(1),
+                    getOrNull(2),
                 )
             }
 
