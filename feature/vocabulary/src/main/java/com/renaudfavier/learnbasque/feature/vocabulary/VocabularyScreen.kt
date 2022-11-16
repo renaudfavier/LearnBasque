@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.renaudfavier.learnbasque.core.designsystem.theme.LearnBasqueTheme
 import com.renaudfavier.learnbasque.core.designsystem.theme.PurpleGrey80
 import com.renaudfavier.learnbasque.core.designsystem.theme.Typography
+import com.renaudfavier.learnbasque.core.ui.LinesBackground
 
 @Composable
 fun VocabularyScreen(
@@ -28,6 +29,7 @@ fun VocabularyScreen(
     viewModel: VocabularyViewModel
 ) {
     val vocabularyUiState = viewModel.vocabularyUiState.collectAsState()
+    val backgroundUiState = viewModel.backgroundUiState.collectAsState()
 
     Surface(
         modifier = modifier,
@@ -36,6 +38,10 @@ fun VocabularyScreen(
         Box(modifier = modifier,
             contentAlignment = Alignment.Center
         ) {
+            LinesBackground(
+                lines = backgroundUiState.value,
+                modifier = modifier
+            )
             when(val value = vocabularyUiState.value) {
                 VocabularyUiState.Loading -> {
                     CircularProgressIndicator()

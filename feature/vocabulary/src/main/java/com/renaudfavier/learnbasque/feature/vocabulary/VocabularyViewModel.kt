@@ -1,27 +1,30 @@
 package com.renaudfavier.learnbasque.feature.vocabulary
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
+import com.renaudfavier.learnbasque.core.designsystem.theme.Purple40
 import com.renaudfavier.learnbasque.core.domain.IsAnswerCorrectUseCase
 import com.renaudfavier.learnbasque.core.model.data.Exercise
 import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.model.data.Word
+import com.renaudfavier.learnbasque.core.ui.Line
+import com.renaudfavier.learnbasque.core.ui.OrigamiBackgroundAnimator
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
-import com.renaudfavier.learnbasque.core.result.asResult
-import com.renaudfavier.learnbasque.core.result.Result
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class VocabularyViewModel @Inject constructor(
@@ -33,7 +36,11 @@ class VocabularyViewModel @Inject constructor(
 
     val vocabularyUiState = MutableStateFlow<VocabularyUiState>(VocabularyUiState.Loading)
 
+    private val origamiBackgroundAnimator = OrigamiBackgroundAnimator(viewModelScope)
+    val backgroundUiState =  origamiBackgroundAnimator.lineFLow
+
     fun start() = viewModelScope.launch {
+        origamiBackgroundAnimator.start()
         vocabularyUiState.emit(getNextWordToMemorize().mapToNewQuestionUiModel())
     }
 
