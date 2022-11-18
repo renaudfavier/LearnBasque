@@ -28,10 +28,10 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
             .groupBy { it.questionId }
             .mapKeys { exerciseRepository.getExercise(it.key) }
             .groupByKnowledge()
-            .map { it ->
+            .map { (exercise, userAnswers) ->
                 KnowledgeWithMastering(
-                    it.key,
-                    it.value
+                    exercise,
+                    userAnswers
                         .sortedBy { exerciseWithUserData ->  exerciseWithUserData.exercise.maxMastering() }
                         .computeMastering()
                 )
@@ -51,6 +51,7 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
 
     private suspend fun Exercise.getKnowledge() =
         when(this) {
+            is Exercise.NewWord -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
             is Exercise.TranslateFromBasque -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
             is Exercise.TranslateToBasque -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
         }

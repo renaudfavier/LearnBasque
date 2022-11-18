@@ -1,6 +1,17 @@
 package com.renaudfavier.learnbasque.core.model.data
 
 sealed class Exercise(open val id: String) {
+
+    data class NewWord(
+        val wordId: String,
+    ): Exercise("$ID_PREFIX-$wordId") {
+        override fun maxMastering(): Float = 0.1f
+
+        companion object {
+            const val ID_PREFIX = "NewWord"
+        }
+    }
+
     data class TranslateFromBasque(
         val wordId: String,
         val difficulty: Difficulty,

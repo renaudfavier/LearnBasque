@@ -17,6 +17,7 @@ class IdBasedExerciseRepository: ExerciseRepository {
                     list[1],
                     Exercise.TranslateToBasque.Difficulty.valueOf(list[2])
                 )
+            Exercise.NewWord.ID_PREFIX -> Exercise.NewWord(list[1])
             else -> TODO()
         }
     }
