@@ -5,20 +5,17 @@ import com.renaudfavier.learnbasque.core.domain.model.KnowledgeWithMastering
 import com.renaudfavier.learnbasque.core.model.data.Exercise
 import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
 import com.renaudfavier.learnbasque.core.model.data.Knowledge
-import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
-import com.renaudfavier.learnbasque.core.model.data.UserAnswer
-import com.renaudfavier.learnbasque.core.model.data.Word
+import com.renaudfavier.learnbasque.core.testing.model.testNewWordExercise
+import com.renaudfavier.learnbasque.core.testing.model.testUserAnswer
+import com.renaudfavier.learnbasque.core.testing.model.testWord
 import com.renaudfavier.learnbasque.core.testing.repository.TestUserAnswerRepository
 import com.renaudfavier.learnbasque.core.testing.repository.TestWordsRepository
 import com.renaudfavier.learnbasque.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.hamcrest.MatcherAssert
-import org.junit.Assert.assertArrayEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 
 class GetUserKnowledgeSetUseCaseTest {
 
@@ -44,6 +41,27 @@ class GetUserKnowledgeSetUseCaseTest {
         val result = useCase()
 
         assertEquals(emptyList<Knowledge>(), result)
+    }
+
+    @Test
+    fun when2ExercisesOn2KnowledgeHaveBeenTried_KnowledgeSetIsSize2() = runTest {
+        val sampleWord1 = testWord(id = "1")
+        val sampleWord2 = testWord(id = "2")
+        wordsRepository.setupNextWords(listOf(sampleWord1, sampleWord2))
+
+        val sampleNewWord1 = testNewWordExercise(sampleWord1.id)
+        val sampleNewWord2 = testNewWordExercise(sampleWord2.id)
+
+        val userAnswers = listOf(
+            testUserAnswer(questionId = sampleNewWord1.id, isCorrect = true),
+            testUserAnswer(questionId = sampleNewWord2.id, isCorrect = true),
+        )
+        userAnswerRepository.setupNextAnswers(userAnswers)
+
+        val result = useCase()
+
+        assertEquals(2, result.size)
+
     }
 
     @Test
@@ -130,44 +148,38 @@ class GetUserKnowledgeSetUseCaseTest {
 
 }
 
-private val sampleWord = Word("wordid", "", "", 0)
+private val sampleWord = testWord("wordid")
 private val sampleKnowledge = Knowledge.Vocabulary(sampleWord)
 private val sampleTranslateFromBasqueTwoPropositionExercise = Exercise.TranslateFromBasque(sampleWord.id, TwoPropositions)
 private val sampleTranslateToBasqueTwoPropositionExercise = Exercise.TranslateToBasque(sampleWord.id, Exercise.TranslateToBasque.Difficulty.TwoPropositions)
 
-private val sampleCorrectUserAnswerFB = UserAnswer(
-    sampleTranslateFromBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    true,
-    Instant.parse("2021-11-08T00:00:00.000Z"),
+private val sampleCorrectUserAnswerFB = testUserAnswer(
+    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    isCorrect = true,
+    date = Instant.parse("2021-11-08T00:00:00.000Z"),
 )
-private val sampleWrongUserAnswerFB = UserAnswer(
-    sampleTranslateFromBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    false,
-    Instant.parse("2021-11-07T00:00:00.000Z"),
+private val sampleWrongUserAnswerFB = testUserAnswer(
+    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    isCorrect = false,
+    date = Instant.parse("2021-11-07T00:00:00.000Z"),
 )
-private val sampleVeryRecentWrongUserAnswerFB = UserAnswer(
-    sampleTranslateFromBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    false,
-    Instant.parse("2021-11-10T00:00:00.000Z"),
+private val sampleVeryRecentWrongUserAnswerFB = testUserAnswer(
+    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    isCorrect = false,
+    date = Instant.parse("2021-11-10T00:00:00.000Z"),
 )
-private val sampleCorrectUserAnswerTB = UserAnswer(
-    sampleTranslateToBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    true,
-    Instant.parse("2021-11-08T00:00:00.000Z"),
+private val sampleCorrectUserAnswerTB = testUserAnswer(
+    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    isCorrect = true,
+    date = Instant.parse("2021-11-08T00:00:00.000Z"),
 )
-private val sampleWrongUserAnswerTB = UserAnswer(
-    sampleTranslateToBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    false,
-    Instant.parse("2021-11-07T00:00:00.000Z"),
+private val sampleWrongUserAnswerTB = testUserAnswer(
+    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    isCorrect = false,
+    date = Instant.parse("2021-11-07T00:00:00.000Z"),
 )
-private val sampleVeryRecentWrongUserAnswerTB = UserAnswer(
-    sampleTranslateToBasqueTwoPropositionExercise.id,
-    QuestionAnswer.AnswerString(""),
-    false,
-    Instant.parse("2021-11-10T00:00:00.000Z"),
+private val sampleVeryRecentWrongUserAnswerTB = testUserAnswer(
+    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    isCorrect = false,
+    date = Instant.parse("2021-11-10T00:00:00.000Z"),
 )

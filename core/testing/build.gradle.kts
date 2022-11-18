@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
+    implementation(libs.kotlinx.datetime)
+
     api(libs.junit4)
     api(libs.androidx.test.core)
     api(libs.kotlinx.coroutines.test)
