@@ -49,6 +49,7 @@ dependencies {
   implementation(project(":core:model"))
 
   implementation(project(":feature:vocabulary"))
+  implementation(project(":feature:microlearning"))
 
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.core.ktx)

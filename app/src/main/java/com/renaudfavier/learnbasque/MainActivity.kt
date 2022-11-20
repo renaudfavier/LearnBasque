@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.renaudfavier.learnbasque.core.designsystem.theme.LearnBasqueTheme
-import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyScreen
-import com.renaudfavier.learnbasque.feature.vocabulary.VocabularyViewModel
+import com.renaudfavier.learnbasque.feature.microlearning.MicroLearningScreen
+import com.renaudfavier.learnbasque.feature.microlearning.MicroLearningViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
 
 
     @Inject
-    lateinit var viewModel: VocabularyViewModel
+    lateinit var viewModel: MicroLearningViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LearnBasqueTheme {
-                VocabularyScreen(
+                MicroLearningScreen(
                     modifier = Modifier.fillMaxSize(),
                     viewModel = viewModel
                 )

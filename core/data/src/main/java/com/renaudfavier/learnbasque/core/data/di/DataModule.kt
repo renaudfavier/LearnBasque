@@ -17,6 +17,8 @@
 package com.renaudfavier.learnbasque.core.data.di
 
 import com.renaudfavier.learnbasque.core.data.repository.BaseWordsRepository
+import com.renaudfavier.learnbasque.core.data.repository.ExerciseRepository
+import com.renaudfavier.learnbasque.core.data.repository.IdBasedExerciseRepository
 import com.renaudfavier.learnbasque.core.data.repository.OfflineUserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
@@ -33,6 +35,9 @@ object DataModule {
 
     @Provides
     fun provideWordRepository(): WordsRepository = BaseWordsRepository()
+
+    @Provides
+    fun provideExerciseRepository(): ExerciseRepository = IdBasedExerciseRepository()
 
 }
 

@@ -1,30 +1,21 @@
 package com.renaudfavier.learnbasque.feature.vocabulary
 
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
-import com.renaudfavier.learnbasque.core.designsystem.theme.Purple40
 import com.renaudfavier.learnbasque.core.domain.IsAnswerCorrectUseCase
 import com.renaudfavier.learnbasque.core.model.data.Exercise
 import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.model.data.Word
-import com.renaudfavier.learnbasque.core.ui.Line
 import com.renaudfavier.learnbasque.core.ui.OrigamiBackgroundAnimator
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.AddAnswerUseCase
 import com.renaudfavier.learnbasque.feature.vocabulary.domain.GetNextWordToMemorizeUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.sin
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 class VocabularyViewModel @Inject constructor(
