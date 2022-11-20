@@ -11,7 +11,7 @@ class FakeUserAnswerRepository: UserAnswerRepository {
 
     private val flow = MutableStateFlow<List<UserAnswer>>(emptyList())
 
-    override fun getAnswersStream(): Flow<List<UserAnswer>> {
+    override suspend fun getAnswersStream(): Flow<List<UserAnswer>> {
         return flow
     }
 

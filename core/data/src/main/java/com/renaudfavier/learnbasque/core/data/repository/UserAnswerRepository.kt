@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserAnswerRepository {
 
-    fun getAnswersStream(): Flow<List<UserAnswer>>
+    suspend fun getAnswersStream(): Flow<List<UserAnswer>>
 
     suspend fun getAnswers(): List<UserAnswer>
 
