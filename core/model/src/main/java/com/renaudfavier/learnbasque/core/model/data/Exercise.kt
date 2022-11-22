@@ -1,10 +1,16 @@
 package com.renaudfavier.learnbasque.core.model.data
 
-sealed class Exercise(open val id: String) {
+sealed interface Exercise {
+
+    val id: String
+    fun maxMastering() : Float
 
     data class NewWord(
         val wordId: String,
-    ): Exercise("$ID_PREFIX-$wordId") {
+    ): Exercise {
+        override val id: String
+            get() = "$ID_PREFIX-$wordId"
+
         override fun maxMastering(): Float = 0.1f
 
         companion object {
@@ -15,7 +21,9 @@ sealed class Exercise(open val id: String) {
     data class TranslateFromBasque(
         val wordId: String,
         val difficulty: Difficulty,
-    ): Exercise("$ID_PREFIX-$wordId-${difficulty.name}") {
+    ): Exercise {
+        override val id: String
+            get() = "$ID_PREFIX-$wordId-${difficulty.name}"
 
         override fun maxMastering(): Float = when(difficulty) {
             Difficulty.TwoPropositions -> 0.2f
@@ -29,10 +37,13 @@ sealed class Exercise(open val id: String) {
             const val ID_PREFIX = "TranslateFromBasque"
         }
     }
+
     data class TranslateToBasque(
         val wordId: String,
         val difficulty: Difficulty,
-    ): Exercise("$ID_PREFIX-$wordId-${difficulty.name}") {
+    ): Exercise {
+        override val id: String
+            get() = "$ID_PREFIX-$wordId-${difficulty.name}"
 
         override fun maxMastering(): Float = when(difficulty) {
             Difficulty.TwoPropositions -> 0.3f
@@ -46,6 +57,4 @@ sealed class Exercise(open val id: String) {
             const val ID_PREFIX = "TranslateToBasque"
         }
     }
-
-    abstract fun maxMastering() : Float
 }
