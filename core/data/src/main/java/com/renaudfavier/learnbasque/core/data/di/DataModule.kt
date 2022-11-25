@@ -22,7 +22,6 @@ import com.renaudfavier.learnbasque.core.data.repository.IdBasedExerciseReposito
 import com.renaudfavier.learnbasque.core.data.repository.OfflineUserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
-import com.renaudfavier.learnbasque.core.data.repository.fake.FakeUserAnswerRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -47,6 +46,6 @@ interface DataModule2 {
 
     @Binds
     fun bindsUserAnswerRepository(
-        topicsRepository: OfflineUserAnswerRepository
+        userAnswerRepository: OfflineUserAnswerRepository
     ): UserAnswerRepository
 }

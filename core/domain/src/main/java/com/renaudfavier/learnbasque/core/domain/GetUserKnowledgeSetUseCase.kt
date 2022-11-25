@@ -14,8 +14,9 @@ import javax.inject.Inject
 - A User has a set of knowledge
 - A User has a certain degree of mastering of each knowledge
 - An exercise is meant to reinforce one or more knowledge
-- The degree of mastering of a knowledge can be determined
-by looking at the result of previous exercises about the knowledge
+- The degree of mastering of a knowledge can be determined by :
+    - The lessons about the user has read about the knowledge
+    - The Results of previous exercises about the knowledge
  */
 
 class GetUserKnowledgeSetUseCase @Inject constructor(
@@ -23,9 +24,25 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
     private val answerRepository: UserAnswerRepository,
     private val wordRepository: WordsRepository
 ) {
-    suspend operator fun invoke(): List<KnowledgeWithMastering> = answerRepository
+
+    //TODO Change result to a Map<Knowledge, Float> Mastering should not be optional
+    // TODO : Optimize this
+    suspend operator fun invoke(): List<KnowledgeWithMastering> {
+        val list = mutableListOf<KnowledgeWithMastering>()
+        list.addAll(getKnowledgeFromExerciseUserAnswers())
+        getKnowledgeFromShownWords().forEach { swk ->
+            if (list.find { it.knowledge == swk.knowledge } == null) {
+                list.add(swk)
+            }
+        }
+        return list
+    }
+
+    private suspend fun getKnowledgeFromShownWords(): List<KnowledgeWithMastering> = emptyList()
+
+    private suspend fun getKnowledgeFromExerciseUserAnswers(): List<KnowledgeWithMastering> = answerRepository
             .getAnswers()
-            .groupBy { it.questionId }
+            .groupBy { it.exerciseId }
             .mapKeys { exerciseRepository.getExercise(it.key) }
             .groupByKnowledge()
             .map { (exercise, userAnswers) ->
@@ -36,6 +53,7 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
                         .computeMastering()
                 )
             }
+
 
     private suspend fun Map<Exercise, List<UserAnswer>>.groupByKnowledge(): Map<Knowledge, List<ExerciseWithUserData>> {
         val returnMap: MutableMap<Knowledge, MutableList<ExerciseWithUserData>> = mutableMapOf()
@@ -51,7 +69,6 @@ class GetUserKnowledgeSetUseCase @Inject constructor(
 
     private suspend fun Exercise.getKnowledge() =
         when(this) {
-            is Exercise.NewWord -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
             is Exercise.TranslateFromBasque -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
             is Exercise.TranslateToBasque -> wordRepository.getWord(wordId)?.let { Knowledge.Vocabulary(it) }
         }

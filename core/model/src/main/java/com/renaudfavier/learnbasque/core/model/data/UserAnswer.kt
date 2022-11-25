@@ -3,7 +3,7 @@ package com.renaudfavier.learnbasque.core.model.data
 import kotlinx.datetime.Instant
 
 data class UserAnswer(
-    val questionId: String,
+    val exerciseId: ExerciseId,
     val answer: QuestionAnswer,
     val isCorrect: Boolean,
     val date: Instant,

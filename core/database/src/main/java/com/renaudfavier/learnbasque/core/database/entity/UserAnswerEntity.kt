@@ -6,16 +6,17 @@ import androidx.room.PrimaryKey
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswerType
 import com.renaudfavier.learnbasque.core.model.data.UserAnswer
+import com.renaudfavier.learnbasque.core.model.data.util.toId
 import kotlinx.datetime.Instant
 
 @Entity(
     tableName = USER_ANSWER_TABLE_NAME,
-    indices = [Index(value = ["questionId"])]
+    indices = [Index(value = ["exerciseId"])]
 )
 data class UserAnswerEntity(
     @PrimaryKey
     val id: String,
-    val questionId: String,
+    val exerciseId: String,
     val answerAsString: String,
     val answerType: QuestionAnswerType,
     val isCorrect: Boolean,
@@ -23,7 +24,7 @@ data class UserAnswerEntity(
 )
 
 fun UserAnswerEntity.asExternalModel() = UserAnswer(
-    questionId = questionId,
+    exerciseId = exerciseId.toId(),
     answer = answerAsString.parse(answerType),
     isCorrect = isCorrect,
     date = date

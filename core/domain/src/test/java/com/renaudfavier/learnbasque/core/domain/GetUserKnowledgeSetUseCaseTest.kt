@@ -53,8 +53,8 @@ class GetUserKnowledgeSetUseCaseTest {
         val sampleNewWord2 = testNewWordExercise(sampleWord2.id)
 
         val userAnswers = listOf(
-            testUserAnswer(questionId = sampleNewWord1.id, isCorrect = true),
-            testUserAnswer(questionId = sampleNewWord2.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleNewWord1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleNewWord2.id, isCorrect = true),
         )
         userAnswerRepository.setupNextAnswers(userAnswers)
 
@@ -154,32 +154,32 @@ private val sampleTranslateFromBasqueTwoPropositionExercise = Exercise.Translate
 private val sampleTranslateToBasqueTwoPropositionExercise = Exercise.TranslateToBasque(sampleWord.id, Exercise.TranslateToBasque.Difficulty.TwoPropositions)
 
 private val sampleCorrectUserAnswerFB = testUserAnswer(
-    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateFromBasqueTwoPropositionExercise.id,
     isCorrect = true,
     date = Instant.parse("2021-11-08T00:00:00.000Z"),
 )
 private val sampleWrongUserAnswerFB = testUserAnswer(
-    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateFromBasqueTwoPropositionExercise.id,
     isCorrect = false,
     date = Instant.parse("2021-11-07T00:00:00.000Z"),
 )
 private val sampleVeryRecentWrongUserAnswerFB = testUserAnswer(
-    questionId = sampleTranslateFromBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateFromBasqueTwoPropositionExercise.id,
     isCorrect = false,
     date = Instant.parse("2021-11-10T00:00:00.000Z"),
 )
 private val sampleCorrectUserAnswerTB = testUserAnswer(
-    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateToBasqueTwoPropositionExercise.id,
     isCorrect = true,
     date = Instant.parse("2021-11-08T00:00:00.000Z"),
 )
 private val sampleWrongUserAnswerTB = testUserAnswer(
-    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateToBasqueTwoPropositionExercise.id,
     isCorrect = false,
     date = Instant.parse("2021-11-07T00:00:00.000Z"),
 )
 private val sampleVeryRecentWrongUserAnswerTB = testUserAnswer(
-    questionId = sampleTranslateToBasqueTwoPropositionExercise.id,
+    exerciseId = sampleTranslateToBasqueTwoPropositionExercise.id,
     isCorrect = false,
     date = Instant.parse("2021-11-10T00:00:00.000Z"),
 )

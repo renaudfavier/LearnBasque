@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.renaudfavier.learnbasque.core.designsystem.theme.PurpleGrey80
 import com.renaudfavier.learnbasque.core.ui.LinesBackground
 import com.renaudfavier.learnbasque.core.ui.NewWordCard
+import com.renaudfavier.learnbasque.core.ui.ProgressButton
 import com.renaudfavier.learnbasque.core.ui.VocabularyQuestionCard
 
 @Composable
@@ -41,10 +42,13 @@ fun MicroLearningScreen(
                     Text(text = "error")
                 }
                 is MicroLearningUiState.Content.NewWord -> {
-                    NewWordCard(basque = state.basque, french = state.french)
+                    NewWordCard(basque = state.basque, french = state.french, onOkClick = state.onOkClick)
                 }
                 is MicroLearningUiState.Content.Translation -> {
                     VocabularyQuestionCard(model = state.cardConfig)
+                    if(state.buttonConfig != null) {
+                        ProgressButton(config = state.buttonConfig)
+                    }
                 }
             }
         }

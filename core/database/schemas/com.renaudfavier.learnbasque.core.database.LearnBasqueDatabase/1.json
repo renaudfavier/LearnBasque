@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b159ff753d4102a5a3ebad562b62653b",
+    "identityHash": "e4f106c5a0db1855fbe8a6ed0a8266be",
     "entities": [
       {
         "tableName": "user_answers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `questionId` TEXT NOT NULL, `answerAsString` TEXT NOT NULL, `answerType` TEXT NOT NULL, `isCorrect` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `answerAsString` TEXT NOT NULL, `answerType` TEXT NOT NULL, `isCorrect` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "questionId",
-            "columnName": "questionId",
+            "fieldPath": "exerciseId",
+            "columnName": "exerciseId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -53,13 +53,13 @@
         },
         "indices": [
           {
-            "name": "index_user_answers_questionId",
+            "name": "index_user_answers_exerciseId",
             "unique": false,
             "columnNames": [
-              "questionId"
+              "exerciseId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_answers_questionId` ON `${TABLE_NAME}` (`questionId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_answers_exerciseId` ON `${TABLE_NAME}` (`exerciseId`)"
           }
         ],
         "foreignKeys": []
@@ -68,7 +68,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b159ff753d4102a5a3ebad562b62653b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e4f106c5a0db1855fbe8a6ed0a8266be')"
     ]
   }
 }

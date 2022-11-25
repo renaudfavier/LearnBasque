@@ -11,7 +11,7 @@ import com.renaudfavier.learnbasque.core.database.util.InstantConverter
     entities = [
         UserAnswerEntity::class,
     ],
-    version = 2,
+    version = 1,
     exportSchema = true,
 )
 @TypeConverters(

@@ -6,10 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.GetBestExerciseToTryNextUseCase
 import com.renaudfavier.learnbasque.core.model.data.Exercise
+import com.renaudfavier.learnbasque.core.model.data.Lesson
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.ui.OrigamiBackgroundAnimator
+import com.renaudfavier.learnbasque.core.ui.ProgressButtonConfig
 import com.renaudfavier.learnbasque.core.ui.VocabularyQuestionCardConfiguration
-import com.renaudfavier.learnbasque.feature.microlearning.domain.AddAnswerUseCase
+import com.renaudfavier.learnbasque.feature.microlearning.domain.AnswerVocabularyExerciseUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +21,7 @@ import javax.inject.Inject
 class MicroLearningViewModel @Inject constructor(
     private val getBestExerciseToTryNextUseCase: GetBestExerciseToTryNextUseCase,
     private val wordsRepository: WordsRepository,
-    private val addAnswerUseCase: AddAnswerUseCase,
+    private val answerVocabularyExerciseUseCase: AnswerVocabularyExerciseUseCase,
 ) : ViewModel() {
 
     val microLearningUiState = MutableStateFlow<MicroLearningUiState>(MicroLearningUiState.Loading)
@@ -26,20 +29,37 @@ class MicroLearningViewModel @Inject constructor(
     private val origamiBackgroundAnimator = OrigamiBackgroundAnimator(viewModelScope)
     val backgroundUiState =  origamiBackgroundAnimator.lineFLow
 
-    private var shownExercise: Exercise? = null
+    private var shownExercise: GetBestExerciseToTryNextUseCase.LearningUnit? = null
 
     fun start() = viewModelScope.launch {
         origamiBackgroundAnimator.start()
         showNextExercise()
     }
 
-    fun answer(answer: QuestionAnswer) = viewModelScope.launch {
-        val exercise = shownExercise ?: return@launch
-        when(val result = addAnswerUseCase(exercise, answer)) {
-            is AddAnswerUseCase.Response.Error -> TODO()
-            is AddAnswerUseCase.Response.Success -> showCorrection(result.isCorrect, answer, result.correction)
+    private var delayJob: Job? = null
+
+    private fun newWordSeen() {
+        viewModelScope.launch {
+            val newWordExercise = shownExercise as? Lesson.NewWord ?: return@launch
+            //newWordWasShownUseCase(newWordExercise)
+            next()
         }
-        showNextExerciseAfterDelay()
+    }
+
+    fun answer(answer: QuestionAnswer.AnswerString) = viewModelScope.launch {
+        val exercise = (shownExercise as? GetBestExerciseToTryNextUseCase.LearningUnit.Exo)?.exercise ?: return@launch
+        when(val result = answerVocabularyExerciseUseCase(exercise, answer)) {
+            is AnswerVocabularyExerciseUseCase.Response.Error -> TODO()
+            is AnswerVocabularyExerciseUseCase.Response.Success -> showCorrection(result.isCorrect, answer, result.correction)
+        }
+        delayJob = showNextExerciseAfterDelay()
+    }
+
+    fun next() {
+        viewModelScope.launch {
+            delayJob?.cancel()
+            showNextExercise()
+        }
     }
 
     private suspend fun showCorrection(
@@ -50,8 +70,20 @@ class MicroLearningViewModel @Inject constructor(
 
     }
 
-    private fun showNextExerciseAfterDelay() = viewModelScope.launch {
-        delay(1000)
+    private suspend fun showNextExerciseAfterDelay(): Job = viewModelScope.launch {
+        val initialState = microLearningUiState.value as? MicroLearningUiState.Content.Translation ?: return@launch
+        val progressButtonConfig = ProgressButtonConfig(
+            onClick = { next() },
+            progress = 0f,
+            alpha = 0.7f
+        )
+        microLearningUiState.value = initialState.copy(buttonConfig = progressButtonConfig)
+
+        for(i in 1..33) {
+            val state = microLearningUiState.value as? MicroLearningUiState.Content.Translation ?: return@launch
+            microLearningUiState.value = state.copy(buttonConfig = progressButtonConfig.copy(progress = i*3f/100f))
+            delay(30)
+        }
         showNextExercise()
     }
 
@@ -62,18 +94,30 @@ class MicroLearningViewModel @Inject constructor(
         shownExercise = nextExercise
     }
 
-    private suspend fun Exercise.mapToUiState() = when(val exercise = this) {
-        is Exercise.NewWord -> wordsRepository.getWord(exercise.wordId)
+    private suspend fun GetBestExerciseToTryNextUseCase.LearningUnit.mapToUiState(): MicroLearningUiState = when(val unit = this) {
+        is GetBestExerciseToTryNextUseCase.LearningUnit.Exo -> unit.exercise.mapToUiState()
+        is GetBestExerciseToTryNextUseCase.LearningUnit.Less -> unit.lesson.mapToUiState()
+    }
+
+    private suspend fun Lesson.mapToUiState() = when(val lesson = this) {
+        is Lesson.NewWord -> wordsRepository.getWord(lesson.wordId)
             ?.let {
-                MicroLearningUiState.Content.NewWord(it.basque, it.french)
+                MicroLearningUiState.Content.NewWord(
+                    basque = it.basque,
+                    french = it.french,
+                    onOkClick = { newWordSeen() }
+                )
             } ?: MicroLearningUiState.Error
+    }
+
+    private suspend fun Exercise.mapToUiState() = when(val exercise = this) {
+
         is Exercise.TranslateFromBasque -> wordsRepository.getWord(exercise.wordId)?.let {
             MicroLearningUiState.Content.Translation(
                 cardConfig = VocabularyQuestionCardConfiguration(
                     wordToTranslate = it.basque,
                     propositions = exercise.difficulty.mapToPropositions(it.french)
                 )
-
             )
         } ?: MicroLearningUiState.Error
         is Exercise.TranslateToBasque -> wordsRepository.getWord(exercise.wordId)?.let {
@@ -117,9 +161,10 @@ class MicroLearningViewModel @Inject constructor(
 
 sealed interface MicroLearningUiState {
     sealed interface Content : MicroLearningUiState {
-        data class NewWord(val basque: String, val french: String): Content
+        data class NewWord(val basque: String, val french: String, val onOkClick: () -> Unit): Content
         data class Translation(
-            val cardConfig: VocabularyQuestionCardConfiguration
+            val cardConfig: VocabularyQuestionCardConfiguration,
+            val buttonConfig: ProgressButtonConfig? = null,
         ): Content
     }
     object Loading: MicroLearningUiState

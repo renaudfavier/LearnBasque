@@ -33,7 +33,7 @@ class AnswerVocabularyExerciseUseCase @Inject constructor(
 
         userAnswerRepository.addAnswer(
             UserAnswer(
-                questionId = exercise.id,
+                exerciseId = exercise.id,
                 answer = userAnswer,
                 isCorrect = userAnswer == correction,
                 date = Clock.System.now()
@@ -44,7 +44,6 @@ class AnswerVocabularyExerciseUseCase @Inject constructor(
     }
 
     private suspend fun Exercise.getCorrection() = when(this) {
-        is Exercise.NewWord -> null
         is Exercise.TranslateFromBasque -> wordsRepository.getWord(wordId)?.french?.let {
             QuestionAnswer.AnswerString(it)
         }

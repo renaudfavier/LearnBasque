@@ -48,7 +48,6 @@ dependencies {
   implementation(project(":core:designsystem"))
   implementation(project(":core:model"))
 
-  implementation(project(":feature:vocabulary"))
   implementation(project(":feature:microlearning"))
 
   implementation(libs.androidx.activity.compose)

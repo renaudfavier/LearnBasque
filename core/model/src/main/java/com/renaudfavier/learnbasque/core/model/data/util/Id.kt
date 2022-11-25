@@ -1,4 +1,4 @@
-package com.renaudfavier.learnbasque.core.id
+package com.renaudfavier.learnbasque.core.model.data.util
 
 data class Id<Type>(val raw: String) {
 

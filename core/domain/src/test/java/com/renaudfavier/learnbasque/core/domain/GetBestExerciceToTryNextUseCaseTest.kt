@@ -1,13 +1,7 @@
 package com.renaudfavier.learnbasque.core.domain
 
 import com.renaudfavier.learnbasque.core.data.repository.IdBasedExerciseRepository
-import com.renaudfavier.learnbasque.core.domain.model.KnowledgeWithMastering
 import com.renaudfavier.learnbasque.core.model.data.Exercise
-import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
-import com.renaudfavier.learnbasque.core.model.data.Knowledge
-import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
-import com.renaudfavier.learnbasque.core.model.data.UserAnswer
-import com.renaudfavier.learnbasque.core.model.data.Word
 import com.renaudfavier.learnbasque.core.testing.model.testNewWordExercise
 import com.renaudfavier.learnbasque.core.testing.model.testTranslateFromBasqueExercise
 import com.renaudfavier.learnbasque.core.testing.model.testTranslateToBasqueExercise
@@ -17,15 +11,9 @@ import com.renaudfavier.learnbasque.core.testing.repository.TestUserAnswerReposi
 import com.renaudfavier.learnbasque.core.testing.repository.TestWordsRepository
 import com.renaudfavier.learnbasque.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import org.hamcrest.MatcherAssert
-import org.junit.Assert.assertArrayEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
 
 class GetBestExerciceToTryNextUseCaseTest {
 
@@ -70,13 +58,13 @@ class GetBestExerciceToTryNextUseCaseTest {
          val sampleExercise2 = testTranslateFromBasqueExercise(sampleWord2.id)
 
         val userAnswers = listOf(
-            testUserAnswer(questionId = sampleNewWord1.id, isCorrect = true),
-            testUserAnswer(questionId = sampleNewWord2.id, isCorrect = true),
-            testUserAnswer(questionId = sampleExercise1.id, isCorrect = true),
-            testUserAnswer(questionId = sampleExercise1.id, isCorrect = true),
-            testUserAnswer(questionId = sampleExercise1.id, isCorrect = true),
-            testUserAnswer(questionId = sampleExercise2.id, isCorrect = false),
-            testUserAnswer(questionId = sampleExercise2.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleNewWord1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleNewWord2.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise2.id, isCorrect = false),
+            testUserAnswer(exerciseId = sampleExercise2.id, isCorrect = true),
         )
         userAnswerRepository.setupNextAnswers(userAnswers)
 
@@ -97,7 +85,7 @@ class GetBestExerciceToTryNextUseCaseTest {
         val sampleExercise1 = testTranslateToBasqueExercise(sampleWord1.id)
 
         // User last 3 answers were correct to the most difficult exercise
-        val sampleCorrectAnswer = testUserAnswer(questionId = sampleExercise1.id, isCorrect = true)
+        val sampleCorrectAnswer = testUserAnswer(exerciseId = sampleExercise1.id, isCorrect = true)
         userAnswerRepository.setupNextAnswers(listOf(sampleCorrectAnswer, sampleCorrectAnswer, sampleCorrectAnswer))
 
         val result = useCase()

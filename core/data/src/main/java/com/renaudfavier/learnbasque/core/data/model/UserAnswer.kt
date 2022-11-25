@@ -8,7 +8,7 @@ import java.util.UUID
 
 fun UserAnswer.toEntity() = UserAnswerEntity(
     id = UUID.randomUUID().toString(),
-    questionId = questionId,
+    exerciseId = exerciseId.raw,
     answerAsString = answer.asString(),
     answerType = answer.type(),
     isCorrect = isCorrect,
