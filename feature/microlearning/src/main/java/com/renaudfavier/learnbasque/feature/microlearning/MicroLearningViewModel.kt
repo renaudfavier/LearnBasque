@@ -4,14 +4,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
-import com.renaudfavier.learnbasque.core.domain.GetBestExerciseToTryNextUseCase
+import com.renaudfavier.learnbasque.core.domain.GetNextLearningUnitUseCase
 import com.renaudfavier.learnbasque.core.model.data.Exercise
 import com.renaudfavier.learnbasque.core.model.data.Lesson
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.ui.OrigamiBackgroundAnimator
 import com.renaudfavier.learnbasque.core.ui.ProgressButtonConfig
 import com.renaudfavier.learnbasque.core.ui.VocabularyQuestionCardConfiguration
-import com.renaudfavier.learnbasque.feature.microlearning.domain.AnswerVocabularyExerciseUseCase
+import com.renaudfavier.learnbasque.core.domain.AnswerVocabularyExerciseUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MicroLearningViewModel @Inject constructor(
-    private val getBestExerciseToTryNextUseCase: GetBestExerciseToTryNextUseCase,
+    private val getNextLearningUnitUseCase: GetNextLearningUnitUseCase,
     private val wordsRepository: WordsRepository,
     private val answerVocabularyExerciseUseCase: AnswerVocabularyExerciseUseCase,
 ) : ViewModel() {
@@ -29,7 +29,7 @@ class MicroLearningViewModel @Inject constructor(
     private val origamiBackgroundAnimator = OrigamiBackgroundAnimator(viewModelScope)
     val backgroundUiState =  origamiBackgroundAnimator.lineFLow
 
-    private var shownExercise: GetBestExerciseToTryNextUseCase.LearningUnit? = null
+    private var shownExercise: GetNextLearningUnitUseCase.LearningUnit? = null
 
     fun start() = viewModelScope.launch {
         origamiBackgroundAnimator.start()
@@ -47,7 +47,7 @@ class MicroLearningViewModel @Inject constructor(
     }
 
     fun answer(answer: QuestionAnswer.AnswerString) = viewModelScope.launch {
-        val exercise = (shownExercise as? GetBestExerciseToTryNextUseCase.LearningUnit.Exo)?.exercise ?: return@launch
+        val exercise = (shownExercise as? GetNextLearningUnitUseCase.LearningUnit.Exo)?.exercise ?: return@launch
         when(val result = answerVocabularyExerciseUseCase(exercise, answer)) {
             is AnswerVocabularyExerciseUseCase.Response.Error -> TODO()
             is AnswerVocabularyExerciseUseCase.Response.Success -> showCorrection(result.isCorrect, answer, result.correction)
@@ -88,15 +88,15 @@ class MicroLearningViewModel @Inject constructor(
     }
 
     private suspend fun showNextExercise() = viewModelScope.launch {
-        val nextExercise = getBestExerciseToTryNextUseCase()
+        val nextExercise = getNextLearningUnitUseCase()
         val state = nextExercise.mapToUiState()
         microLearningUiState.emit(state)
         shownExercise = nextExercise
     }
 
-    private suspend fun GetBestExerciseToTryNextUseCase.LearningUnit.mapToUiState(): MicroLearningUiState = when(val unit = this) {
-        is GetBestExerciseToTryNextUseCase.LearningUnit.Exo -> unit.exercise.mapToUiState()
-        is GetBestExerciseToTryNextUseCase.LearningUnit.Less -> unit.lesson.mapToUiState()
+    private suspend fun GetNextLearningUnitUseCase.LearningUnit.mapToUiState(): MicroLearningUiState = when(val unit = this) {
+        is GetNextLearningUnitUseCase.LearningUnit.Exo -> unit.exercise.mapToUiState()
+        is GetNextLearningUnitUseCase.LearningUnit.Less -> unit.lesson.mapToUiState()
     }
 
     private suspend fun Lesson.mapToUiState() = when(val lesson = this) {

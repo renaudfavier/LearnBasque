@@ -1,5 +1,4 @@
-
-package com.renaudfavier.learnbasque.feature.microlearning.domain
+package com.renaudfavier.learnbasque.core.domain
 
 import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository

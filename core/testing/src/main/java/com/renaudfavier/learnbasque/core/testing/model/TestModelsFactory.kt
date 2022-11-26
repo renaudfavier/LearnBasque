@@ -1,6 +1,7 @@
 package com.renaudfavier.learnbasque.core.testing.model
 
 import com.renaudfavier.learnbasque.core.model.data.Exercise
+import com.renaudfavier.learnbasque.core.model.data.ExerciseId
 import com.renaudfavier.learnbasque.core.model.data.Lesson
 import com.renaudfavier.learnbasque.core.model.data.QuestionAnswer
 import com.renaudfavier.learnbasque.core.model.data.UserAnswer
@@ -12,32 +13,32 @@ import kotlinx.datetime.Instant
 
 
 fun testWord(
-    id: String = "",
+    id: WordId = "".toId(),
     french: String = "",
     basque: String = "",
     complexity: Int = 0,
 ) = Word(
-    id = id.toId(),
+    id = id,
     french = french,
     basque = basque,
     complexity = complexity,
 )
 
-fun testNewWordExercise(id: String = "") = Lesson.NewWord(wordId = id.toId())
+fun testNewWordExercise(id: WordId = "".toId()) = Lesson.NewWord(wordId = id)
 
 fun testTranslateFromBasqueExercise(
-    id: String = "",
+    id: WordId = "".toId(),
     difficulty: Exercise.TranslateFromBasque.Difficulty = Exercise.TranslateFromBasque.Difficulty.TwoPropositions
-) = Exercise.TranslateFromBasque(wordId = id.toId(), difficulty = difficulty)
+) = Exercise.TranslateFromBasque(wordId = id, difficulty = difficulty)
 
 fun testTranslateToBasqueExercise(
-    id: String = "",
+    id: WordId = "".toId(),
     difficulty: Exercise.TranslateToBasque.Difficulty = Exercise.TranslateToBasque.Difficulty.TwoPropositions
-) = Exercise.TranslateToBasque(wordId = id.toId(), difficulty = difficulty)
+) = Exercise.TranslateToBasque(wordId = id, difficulty = difficulty)
 
 fun testUserAnswer(
-    exerciseId: String = "",
+    exerciseId: ExerciseId = "".toId(),
     answer: QuestionAnswer = QuestionAnswer.AnswerString(""),
     isCorrect: Boolean = true,
     date: Instant = Clock.System.now()
-) = UserAnswer(exerciseId = exerciseId.toId(), answer = answer, isCorrect =  isCorrect, date = date)
+) = UserAnswer(exerciseId = exerciseId, answer = answer, isCorrect =  isCorrect, date = date)

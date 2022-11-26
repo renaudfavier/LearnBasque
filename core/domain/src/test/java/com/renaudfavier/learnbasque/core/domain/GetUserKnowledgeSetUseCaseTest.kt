@@ -5,7 +5,9 @@ import com.renaudfavier.learnbasque.core.domain.model.KnowledgeWithMastering
 import com.renaudfavier.learnbasque.core.model.data.Exercise
 import com.renaudfavier.learnbasque.core.model.data.Exercise.TranslateFromBasque.Difficulty.TwoPropositions
 import com.renaudfavier.learnbasque.core.model.data.Knowledge
+import com.renaudfavier.learnbasque.core.model.data.util.toId
 import com.renaudfavier.learnbasque.core.testing.model.testNewWordExercise
+import com.renaudfavier.learnbasque.core.testing.model.testTranslateFromBasqueExercise
 import com.renaudfavier.learnbasque.core.testing.model.testUserAnswer
 import com.renaudfavier.learnbasque.core.testing.model.testWord
 import com.renaudfavier.learnbasque.core.testing.repository.TestUserAnswerRepository
@@ -45,23 +47,21 @@ class GetUserKnowledgeSetUseCaseTest {
 
     @Test
     fun when2ExercisesOn2KnowledgeHaveBeenTried_KnowledgeSetIsSize2() = runTest {
-        val sampleWord1 = testWord(id = "1")
-        val sampleWord2 = testWord(id = "2")
+        val sampleWord1 = testWord(id = "1".toId())
+        val sampleWord2 = testWord(id = "2".toId())
         wordsRepository.setupNextWords(listOf(sampleWord1, sampleWord2))
-
-        val sampleNewWord1 = testNewWordExercise(sampleWord1.id)
-        val sampleNewWord2 = testNewWordExercise(sampleWord2.id)
+        val sampleExercise1 = testTranslateFromBasqueExercise(sampleWord1.id)
+        val sampleExercise2 = testTranslateFromBasqueExercise(sampleWord2.id)
 
         val userAnswers = listOf(
-            testUserAnswer(exerciseId = sampleNewWord1.id, isCorrect = true),
-            testUserAnswer(exerciseId = sampleNewWord2.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise1.id, isCorrect = true),
+            testUserAnswer(exerciseId = sampleExercise2.id, isCorrect = true),
         )
         userAnswerRepository.setupNextAnswers(userAnswers)
 
         val result = useCase()
 
         assertEquals(2, result.size)
-
     }
 
     @Test
@@ -148,7 +148,7 @@ class GetUserKnowledgeSetUseCaseTest {
 
 }
 
-private val sampleWord = testWord("wordid")
+private val sampleWord = testWord("wordid".toId())
 private val sampleKnowledge = Knowledge.Vocabulary(sampleWord)
 private val sampleTranslateFromBasqueTwoPropositionExercise = Exercise.TranslateFromBasque(sampleWord.id, TwoPropositions)
 private val sampleTranslateToBasqueTwoPropositionExercise = Exercise.TranslateToBasque(sampleWord.id, Exercise.TranslateToBasque.Difficulty.TwoPropositions)

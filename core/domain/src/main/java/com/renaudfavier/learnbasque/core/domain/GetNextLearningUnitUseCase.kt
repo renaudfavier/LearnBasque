@@ -1,6 +1,5 @@
 package com.renaudfavier.learnbasque.core.domain
 
-import com.renaudfavier.learnbasque.core.data.repository.UserAnswerRepository
 import com.renaudfavier.learnbasque.core.data.repository.WordsRepository
 import com.renaudfavier.learnbasque.core.domain.model.KnowledgeWithMastering
 import com.renaudfavier.learnbasque.core.model.data.Exercise
@@ -8,14 +7,12 @@ import com.renaudfavier.learnbasque.core.model.data.Knowledge
 import com.renaudfavier.learnbasque.core.model.data.Lesson
 import javax.inject.Inject
 
-class GetBestExerciseToTryNextUseCase @Inject constructor(
+class GetNextLearningUnitUseCase @Inject constructor(
     private val wordsRepository: WordsRepository,
     private val getUserKnowledgeSetUseCase: GetUserKnowledgeSetUseCase,
-    private val answerRepository: UserAnswerRepository,
 ) {
 
     sealed interface LearningUnit {
-
         data class Exo(val exercise: Exercise) : LearningUnit
         data class Less(val lesson: Lesson) : LearningUnit
     }
@@ -59,8 +56,11 @@ class GetBestExerciseToTryNextUseCase @Inject constructor(
     private fun Knowledge.Vocabulary.getBestVocabularyExercise(mastering: Float?) = when {
         mastering == null -> null
         mastering < 0.08f -> null
-        mastering < 0.15f -> Exercise.TranslateFromBasque(this.word.id, Exercise.TranslateFromBasque.Difficulty.TwoPropositions)
-        else ->  Exercise.TranslateToBasque(this.word.id, Exercise.TranslateToBasque.Difficulty.TwoPropositions)
+        mastering < 0.15f -> Exercise.TranslateFromBasque(
+            this.word.id,
+            Exercise.TranslateFromBasque.Difficulty.TwoPropositions
+        )
+        else -> Exercise.TranslateToBasque(this.word.id, Exercise.TranslateToBasque.Difficulty.TwoPropositions)
     }
 
 }
